@@ -40,10 +40,11 @@ class InventoryManager:
         """
         if self.product_exists(product):
             print("Ce produit existe déja.")
-            pass
+            return False
         else:
             inventory_product_entry = InventoryProductEntry(product, quantity)
             self.inventory[product.name]=inventory_product_entry
+            return True
 			
 
     
@@ -58,8 +59,11 @@ class InventoryManager:
         #Sinon, afficher un message d'erreur indiquant que le produit n'a pas été trouvé
         if self.product_exists(product) : 
             self.inventory.pop(product.name)
+            return True
     
-     #Méthode sell_product
+        return False
+    
+    #Méthode sell_product
     """
     La méthode sell_product est utilisée pour vendre une quantité donnée d'un produit.
     Elle prend en argument le nom du produit et la quantité à vendre.
@@ -73,7 +77,7 @@ class InventoryManager:
             if inventory_product_entry_key == product.name:
                 self.inventory[inventory_product_entry_key].sell(quantity)
                 return
-            print(f"Impossible de faire la vente de : {product.name}")
+        print(f"Impossible de faire la vente de : {product.name}")
 
 
     
@@ -108,7 +112,7 @@ class InventoryManager:
         """
         for inventory_product_entry_key in self.inventory:
             if inventory_product_entry_key == name:
-                return self.inventory[inventory_product_entry_key].product
+                return self.inventory[inventory_product_entry_key]
             print(f"Le produit {name} n'existe pas")
 
     #Méthode list_products
@@ -125,3 +129,16 @@ class InventoryManager:
         for inventory_product_entry_key in self.inventory:
             print(self.inventory[inventory_product_entry_key])
         return self.inventory
+    
+
+    """
+    La méthode current_balance(self) retourne la somme des sales - expenses de tout les produits dans l'InventoryManager 
+    """
+    def current_balance(self) : 
+        balance = 0
+        for inventory_product in self.inventory:
+            balance += inventory_product.sales - inventory_product.expenses
+        return balance
+    
+
+
